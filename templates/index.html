@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Hero Section -->
+        <div class="jumbotron bg-primary text-white rounded p-5 mb-4">
+            <h1 class="display-4">Welcome to MsafiriiMoney</h1>
+            <p class="lead">Secure, fast, and reliable money transfers. Send money to friends, family, and businesses instantly with bank-grade security and competitive fees.</p>
+            {% if not current_user.is_authenticated %}
+            <a class="btn btn-light btn-lg" href="{{ url_for('auth.register') }}">Get Started</a>
+            {% else %}
+            <a class="btn btn-light btn-lg" href="{{ url_for('main.dashboard') }}">Go to Dashboard</a>
+            {% endif %}
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bolt fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Instant Transfers</h5>
+                        <p class="card-text">Send money instantly to anyone with a username. No waiting, no delays.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Bank-Grade Security</h5>
+                        <p class="card-text">Your money is protected with enterprise-level security and encryption.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-globe fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Multi-Currency</h5>
+                        <p class="card-text">Support for KES, USD, EUR, and GBP with competitive exchange rates.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Quick Stats -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Service Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Transfer Fee</span>
+                    <span class="badge bg-primary">1%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Processing Time</span>
+                    <span class="badge bg-success">Instant</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Currencies</span>
+                    <span class="badge bg-info">4</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Security</span>
+                    <span class="badge bg-warning">Bank-Grade</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">How It Works</h5>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item border-0 ps-0">Create your account</li>
+                    <li class="list-group-item border-0 ps-0">Set up your bank account</li>
+                    <li class="list-group-item border-0 ps-0">Add money to your account</li>
+                    <li class="list-group-item border-0 ps-0">Start sending money instantly!</li>
+                    <li class="list-group-item border-0 ps-0">Track all your transactions</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

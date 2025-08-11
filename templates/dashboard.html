@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MsafiriiMoney{% endblock %}
+
+{% block content %}
+{% if success_message %}
+<div class="alert alert-success alert-dismissible fade show">
+    {{ success_message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </h1>
+            <a href="{{ url_for('main.transfer') }}" class="btn btn-primary">
+                <i class="fas fa-paper-plane me-2"></i>Send Money
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Accounts Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-university me-2"></i>Your Accounts
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if accounts %}
+                    {% for account in accounts %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">
+                                    {{ account.account_type|title }} Account
+                                    <span class="badge bg-success">Active</span>
+                                </h6>
+                                <p class="text-muted small mb-2">
+                                    Account: {{ account.account_number }} | Created: {{ account.created_at.strftime('%B %d, %Y') }}
+                                </p>
+                                <h4 class="mb-0 text-success">{{ account.currency }} {{ "%.2f"|format(account.balance) }}</h4>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('main.transactions') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-history"></i>
+                                </a>
+                                <a href="{{ url_for('main.transfer') }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-university fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No accounts yet</h5>
+                        <p class="text-muted">Create your first bank account to start using MsafiriiMoney!</p>
+                        <a href="{{ url_for('main.create_account') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Create Account
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Transfers -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exchange-alt me-2"></i>Recent Transfers
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_transfers %}
+                    {% for transfer in recent_transfers %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">
+                                    {% if transfer.sender_id == current_user.id %}
+                                        Sent to {{ transfer.recipient.username }}
+                                    {% else %}
+                                        Received from {{ transfer.sender.username }}
+                                    {% endif %}
+                                    <span class="badge bg-success">Completed</span>
+                                </h6>
+                                <p class="text-muted small mb-2">
+                                    {{ transfer.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                                    {% if transfer.description %}
+                                        | {{ transfer.description }}
+                                    {% endif %}
+                                </p>
+                                <h5 class="mb-0">
+                                    {% if transfer.sender_id == current_user.id %}
+                                        <span class="text-danger">-{{ transfer.currency }} {{ "%.2f"|format(transfer.amount) }}</span>
+                                    {% else %}
+                                        <span class="text-success">+{{ transfer.currency }} {{ "%.2f"|format(transfer.amount) }}</span>
+                                    {% endif %}
+                                </h5>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted">Ref: {{ transfer.transfer_id[:8] }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
+                        <h6 class="text-muted">No transfers yet</h6>
+                        <p class="text-muted">Your transfer history will appear here</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- Profile Summary -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Profile Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-user-circle fa-4x text-primary"></i>
+                </div>
+                <h6 class="text-center">{{ current_user.full_name }}</h6>
+                <p class="text-center text-muted">{{ current_user.email }}</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h4 class="text-primary">{{ accounts|length }}</h4>
+                            <small class="text-muted">Accounts</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">{{ recent_transfers|length }}</h4>
+                        <small class="text-muted">Transfers</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <small class="text-muted">Member since {{ current_user.created_at.strftime('%B %Y') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Login - KenFlask{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control" id="username" name="username" required type="text">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-control" id="password" name="password" required type="password">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input class="form-check-input" id="remember_me" name="remember_me" type="checkbox">
+                        <label class="form-check-label" for="remember_me">Remember Me</label>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" type="submit">Sign In</button>
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p class="mb-0">Don't have an account? <a href="{{ url_for('auth.register') }}">Sign up here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
